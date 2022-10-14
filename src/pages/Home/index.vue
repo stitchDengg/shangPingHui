@@ -1,13 +1,29 @@
 <template>
-  <div>我是首页</div>
+  <div>
+    <!-- 三级联动组件 已经注册为了全局组件，可以不再引入-->
+    <TypeNav></TypeNav>
+    <ListContainer></ListContainer>
+    <Recommend></Recommend>
+    <Rank></Rank>
+    <Like></Like>
+    <Floor></Floor>
+    <Floor></Floor>
+    <Brand></Brand>
+  </div>
 </template>
 
 <script>
-  export default {
-    name:'Home',
-  }
+import ListContainer from "./ListContainer/index.vue";
+import Recommend from "./Recommend/index.vue";
+import Rank from "./Rank/index.vue";
+import Like from "./Like/index.vue";
+import Floor from "./Floor/index.vue";
+import Brand from "./Brand/index.vue";
+export default {
+    name: "Home",
+    components: { ListContainer, Recommend, Rank, Like, Floor, Brand }
+};
 </script>
 
 <style lang="less" scoped>
-
 </style>

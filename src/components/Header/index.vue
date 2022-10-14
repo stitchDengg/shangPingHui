@@ -67,16 +67,51 @@ export default {
     toSearch(){
       // 字符串写法
       // this.$router.push("/search/" + this.searchValue + "?k=" + this.searchValue.toUpperCase())
-      this.$router.push({
+      // 对象写法
+     /*  this.$router.push({
         name:'search',
         query:{
           key:this.searchValue
         }
-      })
+      }) */
       /* ************************************************ */
       // 面试题1:路由跳转传参数的时候，path是否可以结合params参数一起使用？
       // 对象的写法可以是name、path的形式，
       //但是需要注意的是path这种写法不能和params一起使用的
+
+      // 面试题2:如何制定params参数可传可不传
+      // 如果路由要传params参数，但是你就不传，就会发现url有问题
+      // 如何制定params参数可传可不传? 在路由配置路由的时候，在占位的后面加一个问号
+      /* this.$router.push({
+        name:'search',
+        query:{
+          key:this.searchValue.toUpperCase(),
+        }
+      }) */
+
+      // 面试题3:params参数可以传递也可以不传递，如果传递的是空串，如何解决？
+      // 使用undefine解决：params参数可以传递、不传递（空的字符串）
+     /*  this.$router.push({
+        name:'search',
+        params:{keyword:'' || undefined},
+        query:{
+          key:this.searchValue.toUpperCase(),
+        }
+      }) */
+
+      // 面试题4:路由组件能不能传递props数据？
+      // 可以，三种写法
+      this.$router.push({
+        name:'search',
+        params:{keyword:'dasda' || undefined},
+        query:{
+          k:this.searchValue.toUpperCase(),
+        }
+      }).then(() =>{
+        console.log('search跳转成功');
+      }).catch((err) => {
+        console.log(err);
+      })
     }
   }
 };
