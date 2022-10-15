@@ -6,8 +6,9 @@ module.exports = defineConfig({
     open:true,
     host:'localhost',
     port:8080,
+    // 代理跨域
     proxy:{
-      "/api":{
+      '/api':{
         target:"http://gmall-h5-api.atguigu.cn"
       }
     }
