@@ -41,11 +41,11 @@
             v-model="searchValue"
           />
           <!-- 进入搜索 -->
-          <button 
-            class="sui-btn btn-xlarge btn-danger" 
+          <button
+            class="sui-btn btn-xlarge btn-danger"
             type="button"
             @click="toSearch"
-            >
+          >
             搜索
           </button>
         </form>
@@ -56,19 +56,19 @@
 
 <script>
 export default {
-  name:'Header',
+  name: "Header",
   data() {
     return {
-      searchValue:'',
-    }
+      searchValue: "",
+    };
   },
-  methods:{
+  methods: {
     // 搜索按钮的回调函数：需要想search进行跳转
-    toSearch(){
+    toSearch() {
       // 字符串写法
       // this.$router.push("/search/" + this.searchValue + "?k=" + this.searchValue.toUpperCase())
       // 对象写法
-     /*  this.$router.push({
+      /*  this.$router.push({
         name:'search',
         query:{
           key:this.searchValue
@@ -91,7 +91,7 @@ export default {
 
       // 面试题3:params参数可以传递也可以不传递，如果传递的是空串，如何解决？
       // 使用undefine解决：params参数可以传递、不传递（空的字符串）
-     /*  this.$router.push({
+      /*  this.$router.push({
         name:'search',
         params:{keyword:'' || undefined},
         query:{
@@ -101,19 +101,17 @@ export default {
 
       // 面试题4:路由组件能不能传递props数据？
       // 可以，三种写法
-      this.$router.push({
-        name:'search',
-        params:{keyword:'dasda' || undefined},
-        query:{
-          k:this.searchValue.toUpperCase(),
-        }
-      }).then(() =>{
-        console.log('search跳转成功');
-      }).catch((err) => {
-        console.log(err);
-      })
-    }
-  }
+      let location = {
+        name: "search",
+        params: { keyword: this.searchValue || undefined },
+      };
+      if (this.$route.query) {
+        // 如果有query参数就把query参数也带过去
+        location.query = this.$route.query;
+        this.$router.push(location);
+      }
+    },
+  },
 };
 </script>
 
