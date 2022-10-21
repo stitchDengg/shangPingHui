@@ -1,11 +1,11 @@
 // home模块的小仓库
 // state仓库存储数据的地方
-import {reqCategoryList} from "@/api"
-import {reqGetBannerList} from "@/api"
+import {reqCategoryList,reqGetFloorList,reqGetBannerList} from "@/api"
 const state = {
   // 默认初试值别瞎写，服务器返回的是数组，起始值就是数组
   categoryList:[],
   bannerList:[],
+  floorList:[],
 };
 
 // actions 处理action,书写自己的业务逻辑，也可以处理异步
@@ -25,9 +25,14 @@ const actions = {
   // 向mock发布请求，获取banner数据
   async getBannerList({commit}){
     let res = await reqGetBannerList();
-    console.log(res);
     if(res.code === 200){
       commit("GETBANNERLIST",res.data);
+    }
+  },
+  async getFloorList({commit}){
+    let res = await reqGetFloorList();
+    if(res.code == 200) {
+      commit('GETFLOORLIST',res.data);
     }
   }
 };
@@ -38,6 +43,9 @@ const mutations = {
   },
   GETBANNERLIST(state,bannerList){
     state.bannerList = bannerList;
+  },
+  GETFLOORLIST(state,floorList){
+    state.floorList = floorList;
   }
 };
 // getters：理解为计算属性，用于简化仓库数据，让组件获取仓库的数据更加方便

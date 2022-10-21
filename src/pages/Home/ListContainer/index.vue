@@ -6,18 +6,13 @@
         <!--banner轮播-->
         <div class="swiper-container" id="mySwiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img src="./imgaes/banner1.jpg" />
+            <div
+              class="swiper-slide"
+              v-for="carousel in bannerList"
+              :key="carousel.id"
+            >
+              <img :src="carousel.imgUrl" />
             </div>
-            <!-- <div class="swiper-slide">
-              <img src="./imgaes/banner2.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="./imgaes/banner3.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="./imgaes/banner4.jpg" />
-            </div> -->
           </div>
           <!-- 如果需要分页器 -->
           <div class="swiper-pagination"></div>
@@ -101,18 +96,46 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import Swiper from "swiper";
+import { mapState } from "vuex";
+import { nextTick } from "vue";
 export default {
   name: "ListContainer",
-  mounted(){
+  mounted() {
     // 在组件挂载的时候派发action，通知vux发起ajax请求，将数据存储在仓库中
-    this.$store.dispatch('getBannerList');
+    this.$store.dispatch("getBannerList");
   },
-  computed:{
+  computed: {
     ...mapState({
-      bannerList:state => state.home.bannerList,
-    })
-  }
+      bannerList: (state) => state.home.bannerList,
+    }),
+  },
+  watch: {
+    //监听bannerList变化
+    bannerList: {
+      handler(newValue, oldValue) {
+        //console.log(newValue, oldValue);
+        // 如果执行handler方法，代表这个组件实例上的参数已经有了
+        // 当前这个函数只能保证有数据了，但是并不能保证v-for已经执行完毕
+        this.$nextTick(() => {
+          var mySwiper = new Swiper(".swiper-container", {
+            direction: "horizontal", // 垂直切换选项
+            loop: true, // 循环模式选项
+
+            // 如果需要分页器
+            pagination: {
+              el: ".swiper-pagination",
+            },
+            // 如果需要前进后退按钮
+            navigation: {
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            },
+          });
+        });
+      },
+    },
+  },
 };
 </script>
 
@@ -131,6 +154,13 @@ export default {
       height: 100%;
       padding: 5px;
       float: left;
+      .swiper-container {
+        position: relative;
+        width: 730px;
+        height: 454px;
+        overflow: hidden;
+        --swiper-theme-color: #ff6600; /* 设置Swiper风格 */
+      }
     }
 
     .right {
