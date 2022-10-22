@@ -98,7 +98,6 @@
 <script>
 import Swiper from "swiper";
 import { mapState } from "vuex";
-import { nextTick } from "vue";
 export default {
   name: "ListContainer",
   mounted() {

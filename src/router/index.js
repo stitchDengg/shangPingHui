@@ -53,7 +53,6 @@ VueRouter.prototype.replace = function(location,resolve,reject){
           key:$route.query.key
         }
       }
-      
     },
     {
       path:'/login',
