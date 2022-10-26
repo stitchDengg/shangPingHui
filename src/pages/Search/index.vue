@@ -11,23 +11,35 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
+            <!-- 品牌面包屑 -->
             <li v-if="searchParams.categoryName" class="with-x">
-              {{searchParams.categoryName}}
+              {{ searchParams.categoryName }}
               <i @click="removeCategoryName">x</i>
             </li>
+            <!-- 关键字面包屑 -->
             <li v-if="searchParams.keyword" class="with-x">
-              {{searchParams.keyword}}
+              {{ searchParams.keyword }}
               <i @click="removeKeyword">x</i>
             </li>
+            <!-- 品牌面包屑 -->
             <li v-if="searchParams.trademark" class="with-x">
-              {{searchParams.trademark.split(':')[1]}}
+              {{ searchParams.trademark.split(":")[1] }}
               <i @click="removeTrademark">x</i>
+            </li>
+            <!-- 平台售卖的属性值展示 -->
+            <li v-for="(attrvalue, index) in searchParams.props" :key="index" class="with-x">
+              {{ attrvalue.split(':')[1] }}
+              <i>x</i>
             </li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector @getTrademarkName="getTrademarkName"></SearchSelector>
+        <SearchSelector
+          @getTrademarkName="getTrademarkName"
+          @attrsInfo="attrsInfo"
+        >
+        </SearchSelector>
 
         <!--details-->
         <div class="details clearfix">
@@ -172,15 +184,15 @@ export default {
     this.getSearchData();
   },
   // 在组件挂载之前执行一次
-  beforeMount(){
-   /*  this.searchParams.category1Id = this.$route.query.category1Id;
+  beforeMount() {
+    /*  this.searchParams.category1Id = this.$route.query.category1Id;
     this.searchParams.category2Id = this.$route.query.category2Id;
     this.searchParams.category3Id = this.$route.query.category3Id;
     this.searchParams.categoryName = this.$route.query.categoryName;
     this.searchParams.keyword = this.$route.params.keyword; */
     // 在服务器发请求之前，把接口需要的参数进行整理
     //Object.assign 新增语法，合并对象
-    Object.assign(this.searchParams,this.$route.query,this.$route.params);
+    Object.assign(this.searchParams, this.$route.query, this.$route.params);
   },
   computed: {
     // 从vuex获取gettes数据
@@ -193,7 +205,7 @@ export default {
       this.$store.dispatch("getSearchList", this.searchParams);
     },
     // 删除分类的名字
-    removeCategoryName(){
+    removeCategoryName() {
       // 把带给服务器的参数置空了，还需要给服务器发请求
       this.searchParams.categoryName = undefined;
       this.searchParams.category1Id = undefined;
@@ -201,48 +213,56 @@ export default {
       this.searchParams.category3Id = undefined;
       this.getSearchData();
       // 自己跳转自己改变url路径
-      if(this.$route.params){
+      if (this.$route.params) {
         this.$router.push({
-          name:'search',
-          params:this.$route.params,
-        })
+          name: "search",
+          params: this.$route.params,
+        });
       }
     },
     // 删除关键字
-    removeKeyword(){
+    removeKeyword() {
       this.searchParams.keyword = undefined;
       this.getSearchData();
-      if(this.$route.query){
+      if (this.$route.query) {
         this.$router.push({
-          name:'search',
-          query:this.$route.query,
-        })
+          name: "search",
+          query: this.$route.query,
+        });
       }
     },
     // 获取子组件传递的数据，并重新整理参数发请求。
-    getTrademarkName(data){
+    getTrademarkName(data) {
       this.searchParams.trademark = `${data.tmId}:${data.tmName}`;
       this.getSearchData();
     },
     // 删除品牌
-    removeTrademark(){
+    removeTrademark() {
       this.searchParams.trademark = undefined;
       this.getSearchData();
-    }
+    },
+    // 收集平台属性的回调
+    attrsInfo(attrs, attrValue) {
+      // console.log(arrts,attrvalue);
+      let props = `${attrs.attrName}:${attrValue}`;
+      this.searchParams.props.push(props);
+      console.log(this.searchParams.props);
+      this.getSearchData();
+    },
   },
-  watch:{
+  watch: {
     // 监听路由的变化，再次发起请求。
-    $route:{
-      handler(){
-        Object.assign(this.searchParams,this.$route.query,this.$route.params);
+    $route: {
+      handler() {
+        Object.assign(this.searchParams, this.$route.query, this.$route.params);
         this.getSearchData();
         // 每一次请求完毕，应该把相应的1，2，3级路由置空，让他接受下一次的相映的1，2，3Id
-        this.searchParams.category1Id = '';
-        this.searchParams.category2Id = '';
-        this.searchParams.category3Id = '';
-      }
-    }
-  }
+        this.searchParams.category1Id = "";
+        this.searchParams.category2Id = "";
+        this.searchParams.category3Id = "";
+      },
+    },
+  },
 };
 </script>
 

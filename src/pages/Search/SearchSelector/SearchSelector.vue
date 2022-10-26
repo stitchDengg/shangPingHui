@@ -19,11 +19,15 @@
         <a href="javascript:void(0);">更多</a>
       </div>
     </div>
-    <div class="type-wrap" v-for="(attrs,index) in attrsList" :key="index">
+    <div class="type-wrap" v-for="attrs in attrsList" :key="attrs.id">
       <div class="fl key">{{attrs.attrName}}</div>
       <div class="fl value">
         <ul class="type-list">
-          <li v-for="(attrValue,index) in  attrs.attrValueList" :key="index">
+          <li 
+            v-for="(attrValue,index) in  attrs.attrValueList" 
+            :key="index"
+            @click="attrInfo(attrs,attrValue)"
+          >
             <a>{{attrValue}}</a>
           </li>
         </ul>
@@ -46,6 +50,11 @@
       // 为什么？因为父亲中的searchParams参数，子组件把你点击的品牌信息，需要给父组件传递过去
       tradeMarkHandler(trademarkName){
         this.$emit('getTrademarkName',trademarkName);
+      },
+      // 拿到属性相关数据
+      attrInfo(attrs,attrValue){
+        // console.log(attrs,attrValue);
+        this.$emit('attrsInfo',attrs,attrValue)
       }
     }
   }
