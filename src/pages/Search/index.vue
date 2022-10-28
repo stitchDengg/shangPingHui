@@ -29,7 +29,7 @@
             <!-- 平台售卖的属性值展示 -->
             <li v-for="(attrvalue, index) in searchParams.props" :key="index" class="with-x">
               {{ attrvalue.split(':')[1] }}
-              <i>x</i>
+              <i @click="removeAttrvalue(attrvalue)">x</i>
             </li>
           </ul>
         </div>
@@ -46,23 +46,19 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li 
+                  style="cursor: pointer;"
+                  :class="{active:isOne}"
+                  @click="changeOrder('1')"
+                >
+                  <a>综合<span v-show="isOne" class="iconfont" :class="{'icon-jiantoushang':isAsc,'icon-jiantouxia':isDesc}"></span></a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li
+                  style="cursor: pointer;"
+                  :class="{active:isTwo}"
+                  @click="changeOrder('2')"
+                >
+                  <a>价格<span v-show="isTwo" class="iconfont" :class="{'icon-jiantoushang':isAsc,'icon-jiantouxia':isDesc}"></span></a>
                 </li>
               </ul>
             </div>
@@ -109,36 +105,8 @@
               </li>
             </ul>
           </div>
-
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+          <!-- 分页 -->
+          <Pagination></Pagination>
         </div>
       </div>
     </div>
@@ -146,6 +114,7 @@
 </template>
 
 <script>
+import Pagination  from '@/components/Pagination';
 import { mapGetters, mapState } from "vuex";
 import SearchSelector from "./SearchSelector/SearchSelector";
 export default {
@@ -160,12 +129,12 @@ export default {
         category2Id: "",
         // 三级分类id
         category3Id: "",
-        // 分类明
+        // 分类名
         categoryName: "",
         // 关键字
         keyword: "",
-        // 排序
-        order: "",
+        // 排序：初始的时候是综合而且是降序
+        order: "1:desc",
         // 页码
         pageNo: 1,
         // 一页展示的数据
@@ -179,7 +148,8 @@ export default {
   },
   components: {
     SearchSelector,
-  },
+    Pagination,
+},
   mounted() {
     this.getSearchData();
   },
@@ -197,6 +167,26 @@ export default {
   computed: {
     // 从vuex获取gettes数据
     ...mapGetters(["goodList", "attrsList", "trademarkList"]),
+    isOne(){
+      return this.searchParams.order.indexOf('1') != -1;
+    },
+    isTwo(){
+      return this.searchParams.order.indexOf('2') != -1;
+    },
+    jianTou(){
+      if(this.searchParams.order.indexOf('desc') != -1){
+        return '&#xe62d;';
+      }else{
+        return '&#xe62c;';
+      }
+    },
+    isAsc(){
+      return this.searchParams.order.indexOf('asc') != -1;
+    },
+    isDesc(){
+      return this.searchParams.order.indexOf('desc') != -1;
+    }
+
   },
   methods: {
     // 像服务器发请求根据search（根据参数不同的数据进行展示
@@ -244,9 +234,34 @@ export default {
     // 收集平台属性的回调
     attrsInfo(attrs, attrValue) {
       // console.log(arrts,attrvalue);
+      // 整理参数格式
       let props = `${attrs.attrName}:${attrValue}`;
-      this.searchParams.props.push(props);
-      console.log(this.searchParams.props);
+      // 数组去重
+      if(this.searchParams.props.indexOf(props) == -1){
+        // 将数据加入数组
+        this.searchParams.props.push(props);
+      }
+      this.getSearchData();
+    },
+    // 移除商品属性
+    removeAttrvalue(attrvalue){
+      this.searchParams.props =  this.searchParams.props.filter((element) => {
+        return element != attrvalue;
+      })
+      this.getSearchData();
+    },
+    // 改变排序顺序
+    changeOrder(flag){
+      let arr = this.searchParams.order.split(':');
+      // 判断是否需要切换综合或者价格
+      if(flag != arr[0]){
+        arr[0] = flag;
+      }
+      arr[1] = arr[1] == 'desc'? 'asc' : 'desc';
+
+      // 将数组拼接成字符串
+      this.searchParams.order = arr.join('');
+      // console.log(arr.join(':'));
       this.getSearchData();
     },
   },
@@ -508,94 +523,12 @@ export default {
           }
         }
       }
-
-      .page {
-        width: 733px;
-        height: 66px;
-        overflow: hidden;
-        float: right;
-
-        .sui-pagination {
-          margin: 18px 0;
-
-          ul {
-            margin-left: 0;
-            margin-bottom: 0;
-            vertical-align: middle;
-            width: 490px;
-            float: left;
-
-            li {
-              line-height: 18px;
-              display: inline-block;
-
-              a {
-                position: relative;
-                float: left;
-                line-height: 18px;
-                text-decoration: none;
-                background-color: #fff;
-                border: 1px solid #e0e9ee;
-                margin-left: -1px;
-                font-size: 14px;
-                padding: 9px 18px;
-                color: #333;
-              }
-
-              &.active {
-                a {
-                  background-color: #fff;
-                  color: #e1251b;
-                  border-color: #fff;
-                  cursor: default;
-                }
-              }
-
-              &.prev {
-                a {
-                  background-color: #fafafa;
-                }
-              }
-
-              &.disabled {
-                a {
-                  color: #999;
-                  cursor: default;
-                }
-              }
-
-              &.dotted {
-                span {
-                  margin-left: -1px;
-                  position: relative;
-                  float: left;
-                  line-height: 18px;
-                  text-decoration: none;
-                  background-color: #fff;
-                  font-size: 14px;
-                  border: 0;
-                  padding: 9px 18px;
-                  color: #333;
-                }
-              }
-
-              &.next {
-                a {
-                  background-color: #fafafa;
-                }
-              }
-            }
-          }
-
-          div {
-            color: #333;
-            font-size: 14px;
-            float: right;
-            width: 241px;
-          }
-        }
-      }
     }
   }
+}
+
+@font-face {
+  font-family: 'iconfont';
+  src: url('@/assets/iconfont.ttf') format('truetype');
 }
 </style>
