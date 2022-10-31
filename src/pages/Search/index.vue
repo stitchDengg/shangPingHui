@@ -105,8 +105,15 @@
               </li>
             </ul>
           </div>
-          <!-- 分页 -->
-          <Pagination></Pagination>
+          <!-- 分页组件 -->
+          <Pagination 
+            :pageNo = "this.searchParams.pageNo"
+            :pageSize = "this.searchParams.pageSize"
+            :total="total"
+            :continues="5"
+            @getPageNo="getPageNo"
+          >
+          </Pagination>
         </div>
       </div>
     </div>
@@ -136,9 +143,9 @@ export default {
         // 排序：初始的时候是综合而且是降序
         order: "1:desc",
         // 页码
-        pageNo: 1,
+        pageNo: 2,
         // 一页展示的数据
-        pageSize: 10,
+        pageSize: 3,
         // 平台售卖的属性操作
         props: [],
         // 品牌
@@ -166,7 +173,7 @@ export default {
   },
   computed: {
     // 从vuex获取gettes数据
-    ...mapGetters(["goodList", "attrsList", "trademarkList"]),
+    ...mapGetters(["goodList", "attrsList", "trademarkList","total"]),
     isOne(){
       return this.searchParams.order.indexOf('1') != -1;
     },
@@ -185,8 +192,10 @@ export default {
     },
     isDesc(){
       return this.searchParams.order.indexOf('desc') != -1;
-    }
-
+    },
+    /* total(){
+      return this.$store.state.search.searchList.total;
+    } */
   },
   methods: {
     // 像服务器发请求根据search（根据参数不同的数据进行展示
@@ -257,13 +266,20 @@ export default {
       if(flag != arr[0]){
         arr[0] = flag;
       }
-      arr[1] = arr[1] == 'desc'? 'asc' : 'desc';
-
+      arr[1] = arr[1] === 'desc'? 'asc' : 'desc';
       // 将数组拼接成字符串
-      this.searchParams.order = arr.join('');
+      this.searchParams.order = arr.join(':');
       // console.log(arr.join(':'));
       this.getSearchData();
     },
+    // 获取分页组件的页码数
+    getPageNo(pageNo){
+      // console.log(pageNo);
+      // 整理服务器参数
+      this.searchParams.pageNo = pageNo;
+      // 再次发请求
+      this.getSearchData();
+    }
   },
   watch: {
     // 监听路由的变化，再次发起请求。

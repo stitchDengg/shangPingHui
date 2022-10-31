@@ -11,7 +11,6 @@ const actions = {
   async getSearchList({commit},params){
     // 当前这个reqGetSearchInfo传递参数的时候至少传递一个空对象
     let res =  await reqGetSearchInfo(params);
-    console.log(res.data);
     if(res.code === 200){
       commit("GETSESRCHLIST",res.data);
     }
@@ -34,6 +33,9 @@ const getters = {
   trademarkList(state){
     return state.searchList.trademarkList || [];
   },
+  total(){
+    return state.searchList.total;
+  }
 };
 export default{
   state,
