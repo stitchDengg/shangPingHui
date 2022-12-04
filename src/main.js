@@ -22,4 +22,7 @@ new Vue({
   // 注册路由：写法是kv一致省略v
   router,
   store,
+  beforeCreate(){
+    Vue.prototype.$bus = this //安装全局事件总线，$bus就是当前应用的vm
+  }
 }).$mount('#app')

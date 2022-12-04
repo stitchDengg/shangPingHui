@@ -26,3 +26,22 @@ export const reqGetFloorList = () => Mockrequests({url:'/floor',method:'get'});
 } */
 // 当前这个接口，给服务器传递参数params，至少是一个空对象
 export const reqGetSearchInfo = (params) => requests({url:'/list',method:'post',data:params})
+
+// 获取商品详情 URl：/api/item/{ skuId } get
+export const reqGoodsInfo = (skuId) => requests({url:`/item/${skuId}`,method:'get'});
+
+//将产品添加到购物车中:/api/cart/addToCart/{ skuId }/{ skuNum }（获取更新某一个产品的个数）
+export const reqAddOrUpdateShopCat =  (skuId,skuNum) => requests({url:`/cart/addToCart/${ skuId }/${skuNum }`,method:'post'});
+
+
+// 获取购物车列表
+///api/cart/cartList GET
+export const reqGetCarList = () => requests({url:'/cart/cartList',method:'get'});
+
+// 删除购物车
+// /api/cart/deleteCart/{skuId}
+export const reqDeleteCartById = skuId => requests({url:`cart/deleteCart/${skuId}`,method:'DELETE'});
+
+// 切换购物车列表选定状态
+// /api/cart/checkCart/{skuID}/{isChecked} GET
+export const reqUpdateCartById = (skuId,isChecked) => requests({url:`cart/checkCart/${skuID}/${isChecked}`,method:'get'});

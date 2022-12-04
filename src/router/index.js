@@ -1,9 +1,6 @@
 import VueRouter from "vue-router";
 import Vue from "vue";
-import Home from '../pages/Home';
-import Search from '../pages/Search'
-import Login from '../pages/Login'
-import Register from '../pages/Register'
+import routes from './routes'
 // console.log(VueRouter);
 let originPush = VueRouter.prototype.push;
 let originRepalce = VueRouter.prototype.replace;
@@ -31,45 +28,12 @@ VueRouter.prototype.replace = function(location,resolve,reject){
 
   const router = new VueRouter({
   // 配置路由
-  routes:[
-    {
-      path:'/home',
-      component:Home,
-      meta:{show:true}
-    },
-    {
-      path:'/search/:keyword?',
-      component:Search,
-      meta:{show:true},
-      name:'search',
-      // 1.布尔值写法:params
-      // props:true,
-      // 2.对象写法:额外的给路由组件一些props
-      // props:{a:1,b:2},
-      // 3.函数写法：可以给params参数，也可以给query参数
-      props($route){
-        return {
-          keyword:$route.params.keyword,
-          key:$route.query.key
-        }
-      }
-    },
-    {
-      path:'/login',
-      component:Login,
-      meta:{show:false}
-    },
-    {
-      path:'/register',
-      component:Register,
-      meta:{show:false}
-    },
-    // 重定向，在项目跑起来的时候，访问/的时候，立马让他定向到首页
-    {
-      path:'*',
-      redirect:'/home'
-    },
-  ]
+  routes,
+  // 滚动行为配置
+  scrollBehavior(to, from, savedPosition) {
+    // 始终滚动到顶部
+    return { y: 0 }
+  },
 })
 
 export default router

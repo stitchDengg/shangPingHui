@@ -34,7 +34,7 @@
           </ul>
         </div>
 
-        <!--selector-->
+        <!--selector组件-->
         <SearchSelector
           @getTrademarkName="getTrademarkName"
           @attrsInfo="attrsInfo"
@@ -66,12 +66,24 @@
           <!-- 商品列表 -->
           <div class="goods-list">
             <ul class="yui3-g">
-              <li class="yui3-u-1-5" v-for="good in goodList" :key="good.id">
+              <li 
+                class="yui3-u-1-5" 
+                v-for="good in goodList" 
+                :key="good.id"
+              >
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"
-                      ><img :src="good.defaultImg"
-                    /></a>
+
+                    <!-- 声明式导航 带id传过去 -->
+                    <router-link :to="{
+                      name:'detail',
+                      params:{
+                        skuId:good.id,
+                      }
+                    }"
+                    >
+                      <img :src="good.defaultImg"/>
+                    </router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -143,7 +155,7 @@ export default {
         // 排序：初始的时候是综合而且是降序
         order: "1:desc",
         // 页码
-        pageNo: 2,
+        pageNo: 1,
         // 一页展示的数据
         pageSize: 3,
         // 平台售卖的属性操作

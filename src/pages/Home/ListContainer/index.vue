@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import Swiper from "swiper";
+import Swiper, { Navigation, Pagination } from 'swiper';
 import { mapState } from "vuex";
 export default {
   name: "ListContainer",
@@ -117,6 +117,7 @@ export default {
         // 如果执行handler方法，代表这个组件实例上的参数已经有了
         // 当前这个函数只能保证有数据了，但是并不能保证v-for已经执行完毕
         this.$nextTick(() => {
+          Swiper.use([Navigation, Pagination]);
           var mySwiper = new Swiper(".swiper-container", {
             direction: "horizontal", // 垂直切换选项
             loop: true, // 循环模式选项

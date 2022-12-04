@@ -82,7 +82,7 @@
 
 <script>
 import { mapState } from "vuex";
-import Swiper from "swiper";
+import Swiper, { Navigation, Pagination } from 'swiper';
 export default {
   name: "Floor",
   props: ["floorList"],
@@ -90,6 +90,7 @@ export default {
     floorList: {
       handler() {
         this.$nextTick(() => {
+          Swiper.use([Navigation, Pagination]);
           var mySwiper = new Swiper(".swiper-container", {
             direction: "horizontal", // 垂直切换选项
             loop: true, // 循环模式选项
