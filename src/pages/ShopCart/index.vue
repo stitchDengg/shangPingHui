@@ -13,7 +13,12 @@
       <div class="cart-body">
         <ul class="cart-list" v-for="cart in cartInfoList" :key="cart.id">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" :checked="cart.isChecked" />
+            <input
+              type="checkbox"
+              name="chk_list"
+              :checked="cart.isChecked"
+              @change="updateCart(cart)"
+            />
           </li>
           <li class="cart-list-con2">
             <img :src="cart.imgUrl" />
@@ -57,11 +62,16 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" :checked="isChecked" />
+        <input
+          class="chooseAll"
+          type="checkbox"
+          :checked="isChecked"
+          @click="allChecked($event)"
+        />
         <span>全选</span>
       </div>
       <div class="option">
-        <a href="#none">删除选中的商品</a>
+        <a href="#none" @click="deleteAllCheckedCart">删除选中的商品</a>
         <a href="#none">移到我的关注</a>
         <a href="#none">清除下柜商品</a>
       </div>
@@ -72,7 +82,7 @@
           <i class="summoney">{{ allPrice }}</i>
         </div>
         <div class="sumbtn">
-          <a class="sum-btn" href="###" target="_blank">结算</a>
+          <button class="sum-btn"  @click.prevent="$router.push('/trade')">结算</button>
         </div>
       </div>
     </div>
@@ -94,7 +104,7 @@ export default {
       this.$store.dispatch("getCarList");
     },
     //商品数量变化函数
-    handler:thorottling(async function(type, disNum, cart){
+    handler: thorottling(async function (type, disNum, cart) {
       console.log(type, disNum, cart);
       switch (type) {
         case "add":
@@ -124,7 +134,7 @@ export default {
       }
     }),
     // 删除购物车的某一项
-    deleteCartById: thorottling(async function(cart){
+    deleteCartById: thorottling(async function (cart) {
       try {
         // 如果再次删除成功，就在此发请求得到数据
         await this.$store.dispatch("DeleteCartById", cart.skuId);
@@ -134,6 +144,74 @@ export default {
         console.log(error.message);
       }
     }, 100),
+    // 改变产品选中状态
+    async updateCart(cart) {
+      try {
+        let checked = cart.isChecked == "0" ? "1" : "0";
+        console.log(checked, 1233);
+        await this.$store.dispatch("updateCartByid", {
+          skuId: cart.skuId,
+          isChecked: checked,
+        });
+        this.getData();
+      } catch (error) {
+        console.log(error.message);
+      }
+    },
+    // 判断是否全部执行成功
+    deleteAllCheckedCartPromise() {
+      // 记录每次发送请求返回的promise对象
+      let promiseAll = [];
+      this.cartInfoList.forEach(async (item) => {
+        if (item.isChecked == "1") {
+          try {
+            // 如果再次删除成功，就在此发请求得到数据
+            let promise = this.$store.dispatch("DeleteCartById", item.skuId);
+            promiseAll.push(promise);
+          } catch (error) {
+            console.log(error.message);
+          }
+        }
+      });
+      console.log(promiseAll,1231132);
+      return Promise.all(promiseAll);
+    },
+    // 删除已选择的商品
+    async deleteAllCheckedCart(){
+      let res = await this.deleteAllCheckedCartPromise();
+      if(res){
+        this.getData();
+      }
+    },
+    // 全选按钮
+    allChecked() {
+      // 如果是选定状态，就全部取消选择
+      if (this.isChecked) {
+        this.cartInfoList.forEach(async (item) => {
+          try {
+            await this.$store.dispatch("updateCartByid", {
+              skuId: item.skuId,
+              isChecked: '0',
+            });
+            this.getData();
+          } catch (error) {
+            console.log(error.message);
+          }
+        });
+      }else{
+        this.cartInfoList.forEach(async (item) => {
+          try {
+            await this.$store.dispatch("updateCartByid", {
+              skuId: item.skuId,
+              isChecked: '1',
+            });
+            this.getData();
+          } catch (error) {
+            console.log(error.message);
+          }
+        });
+      }
+    },
   },
   computed: {
     ...mapGetters(["cartList"]),

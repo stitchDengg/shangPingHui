@@ -6,6 +6,8 @@ import Register from '../pages/Register'
 import Detail from '../pages/Detail'
 import AddCartSuccess from '../pages/AddCartSuccess'
 import ShopCart from '@/pages/ShopCart'
+import Trade from '@/pages/Trade'
+import Pay from '@/pages/Pay'
 export default [
   {
     path:'/home',
@@ -30,6 +32,7 @@ export default [
     }
   },
   {
+    name:'login',
     path:'/login',
     component:Login,
     meta:{show:false}
@@ -62,7 +65,21 @@ export default [
     name:'shopCart',
     path:'/shopCart',
     component:ShopCart,
-    meta:{show:false}
+    meta:{show:true}
+  },
+  // 交易页面
+  {
+    name:'trade',
+    path:'/trade',
+    component:Trade,
+    meta:{show:true}
+  },
+  // 支付页面
+  {
+    name:'pay',
+    path:'/pay',
+    component:Pay,
+    meta:{show:true}
   },
   // 重定向，在项目跑起来的时候，访问/的时候，立马让他定向到首页
   {

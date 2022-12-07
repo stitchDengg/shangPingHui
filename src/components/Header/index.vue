@@ -6,11 +6,16 @@
       <div class="container">
         <div class="loginList">
           <p>尚品汇欢迎您！</p>
-          <p>
+          <p v-if="!userInfo.name">
             <span>请</span>
             <!-- 声明式路由导航：务必要有to属性-->
             <router-link to="/login">登录</router-link>
             <router-link to="/register" class="register">免费注册</router-link>
+          </p>
+          <p v-else>
+            <a href="">{{userInfo.name}}</a>
+            ｜
+            <a href="" @click="logout">退出登陆</a>
           </p>
         </div>
         <div class="typeList">
@@ -55,6 +60,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import {reqLogout} from '@/api';
 export default {
   name: "Header",
   data() {
@@ -110,7 +117,18 @@ export default {
         location.query = this.$route.query;
         this.$router.push(location);
       }
-      this.searchValue = '';
+      this.searchValue = "";
+    },
+    // 退出登陆
+    logout(){
+      reqLogout().then(res => {
+        console.log(res);
+      })
+    }
+  },
+  computed: {
+    userInfo(){
+      return this.$store.state.users.userInfo;
     },
   },
 };

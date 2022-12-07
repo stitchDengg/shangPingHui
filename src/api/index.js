@@ -44,4 +44,46 @@ export const reqDeleteCartById = skuId => requests({url:`cart/deleteCart/${skuId
 
 // 切换购物车列表选定状态
 // /api/cart/checkCart/{skuID}/{isChecked} GET
-export const reqUpdateCartById = (skuId,isChecked) => requests({url:`cart/checkCart/${skuID}/${isChecked}`,method:'get'});
+export const reqUpdateCartById = (skuId,isChecked) => requests({url:`cart/checkCart/${skuId}/${isChecked}`,method:'get'});
+
+// 获取验证码
+// /api/user/passport/sendCode/{phone}
+export const reqGetCode = phone => requests({url:`user/passport/sendCode/${phone}`,method:'get'});
+
+// 用户注册
+export const register = (phone,password,code) => requests({
+  url:'user/passport/register',
+  method:'post',
+  data:{
+    phone,
+    password,
+    code
+  }
+})
+
+// 登陆 
+///api/user/passport/login
+export const reqLogin = (data) => requests({
+  url:'user/passport/login',
+  method:'post',
+  data
+})
+
+//获取用户信息
+// /api/user/passport/auth/getUserInfo
+export const reqGetUserInfo = () => requests({
+  url:'user/passport/auth/getUserInfo',
+  method:'get'
+})
+
+// 退出登陆
+// /api/user/passport/logout
+export const reqLogout = () => requests({url:'/user/passport/logout',method:'get'});
+
+// 获取用户地址信息
+// /api/user/userAddress/auth/findUserAddressList
+export const reqAddressInfo = () => requests({url:'user/userAddress/auth/findUserAddressList',method:'get'});
+
+// 获取订单交易页面信息
+///api/order/auth/trade
+export const reqOrderInfo = () => requests({url:'order/auth/trade',method:'get'});

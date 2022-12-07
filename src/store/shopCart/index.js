@@ -1,4 +1,4 @@
-import { reqGetCarList, reqDeleteCartById } from '@/api'
+import { reqGetCarList, reqDeleteCartById, reqUpdateCartById } from '@/api'
 
 const state = {
   cartList: [],
@@ -16,11 +16,21 @@ const actions = {
   async DeleteCartById({ commit }, skuId) {
     let res = await reqDeleteCartById(skuId);
     if (res.code == 200) {
+      return 'ok';
+    } else {
+      return Promise.reject(new Error('请求失败'));
+    }
+  },
+  // 更新商品的选中状态
+  async updateCartByid({ commit }, { skuId, isChecked }) {
+    let res = await reqUpdateCartById(skuId, isChecked);
+    if (res.code == 200) {
       return 'ok'
     } else {
       return Promise.reject(new Error('请求失败'));
     }
   },
+
 }
 const mutations = {
   GETCARLIST(state, cartList) {

@@ -31,6 +31,10 @@ requests.interceptors.request.use((config) => {
     // 给请求头添加字段：和后台商量好了
     config.headers.userTempId = store.state.detail.uuid_token;
   }
+  // 需要携带token带给服务器
+  if(localStorage.getItem('token')){
+    config.headers.token = localStorage.getItem('token');
+  }
   return config;
 })
 
