@@ -12,6 +12,8 @@ module.exports = defineConfig({
         target:"http://gmall-h5-api.atguigu.cn"
       }
     },
-    publicPath: 'shangPingHui'
+    publicPath: '/shangPingHui',//github仓库名
+    assetsDir: 'shangPingHui',//同上，否则访问不到静态资源
+    outputDir:"dist",
   }
 })
