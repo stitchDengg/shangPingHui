@@ -89,9 +89,11 @@ export default {
     async login() {
       try {
         let { phone, password } = this;
-        phone && password && (await this.$store.dispatch("userLogin", { phone, password }));
-        // 跳转到home首页
-        this.$router.push('/home');
+        this.$store.dispatch("userLogin", { phone, password }).then((res) => {
+          console.log(res,111);
+          // 跳转到home首页
+          this.$router.push("/home");
+        });
       } catch (error) {
         console.log(error);
       }

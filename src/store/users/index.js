@@ -16,23 +16,18 @@ const actions = {
     }
   },
   // 登陆业务
-  userLogin({commit},data){
-    reqLogin(data).then(res => {
-      console.log(res,'login');
-      if(res.code == 200){
-        
-        // 服务器下发token，用户唯一标识符
-        // 将来通过带token来找服务器要用户信息进行展示
-        commit('USERLOGIN',res.data.token);
-        localStorage.setItem('token',res.data.token);
-        return 'ok';
-      }else{
-        alert(res.message);
-        return Promise.reject(new Error('failr'));
-      }
-    }).catch(e => {
-      console.log(e);
-    })
+  async userLogin({commit},data){
+    let res = await reqLogin(data);
+    if(res.code == 200){
+      // 服务器下发token，用户唯一标识符
+      // 将来通过带token来找服务器要用户信息进行展示
+      commit('USERLOGIN',res.data.token);
+      localStorage.setItem('token',res.data.token);
+      return 'ok';
+    }else{
+      alert(res.message);
+      return Promise.reject(new Error('获取信息失败'));
+    }
   },
   // 获取用户信息
   async getUserInfo({commit}){

@@ -17,6 +17,7 @@ const actions = {
 
   // 将产品添加到购物车中
   async addOrUpdateShopCat({commit},{skuid,skuNum}){
+    console.log(skuid,skuNum);
     let res = await reqAddOrUpdateShopCat(skuid,skuNum);
     if(res.code == 200){
       return 'ok';

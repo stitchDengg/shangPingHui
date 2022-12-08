@@ -27,8 +27,12 @@
               <i @click="removeTrademark">x</i>
             </li>
             <!-- 平台售卖的属性值展示 -->
-            <li v-for="(attrvalue, index) in searchParams.props" :key="index" class="with-x">
-              {{ attrvalue.split(':')[1] }}
+            <li
+              v-for="(attrvalue, index) in searchParams.props"
+              :key="index"
+              class="with-x"
+            >
+              {{ attrvalue.split(":")[1] }}
               <i @click="removeAttrvalue(attrvalue)">x</i>
             </li>
           </ul>
@@ -46,19 +50,37 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li 
-                  style="cursor: pointer;"
-                  :class="{active:isOne}"
+                <li
+                  style="cursor: pointer"
+                  :class="{ active: isOne }"
                   @click="changeOrder('1')"
                 >
-                  <a>综合<span v-show="isOne" class="iconfont" :class="{'icon-jiantoushang':isAsc,'icon-jiantouxia':isDesc}"></span></a>
+                  <a
+                    >综合<span
+                      v-show="isOne"
+                      class="iconfont"
+                      :class="{
+                        'icon-jiantoushang': isAsc,
+                        'icon-jiantouxia': isDesc,
+                      }"
+                    ></span
+                  ></a>
                 </li>
                 <li
-                  style="cursor: pointer;"
-                  :class="{active:isTwo}"
+                  style="cursor: pointer"
+                  :class="{ active: isTwo }"
                   @click="changeOrder('2')"
                 >
-                  <a>价格<span v-show="isTwo" class="iconfont" :class="{'icon-jiantoushang':isAsc,'icon-jiantouxia':isDesc}"></span></a>
+                  <a
+                    >价格<span
+                      v-show="isTwo"
+                      class="iconfont"
+                      :class="{
+                        'icon-jiantoushang': isAsc,
+                        'icon-jiantouxia': isDesc,
+                      }"
+                    ></span
+                  ></a>
                 </li>
               </ul>
             </div>
@@ -66,23 +88,19 @@
           <!-- 商品列表 -->
           <div class="goods-list">
             <ul class="yui3-g">
-              <li 
-                class="yui3-u-1-5" 
-                v-for="good in goodList" 
-                :key="good.id"
-              >
+              <li class="yui3-u-1-5" v-for="good in goodList" :key="good.id">
                 <div class="list-wrap">
                   <div class="p-img">
-
                     <!-- 声明式导航 带id传过去 -->
-                    <router-link :to="{
-                      name:'detail',
-                      params:{
-                        skuId:good.id,
-                      }
-                    }"
+                    <router-link
+                      :to="{
+                        name: 'detail',
+                        params: {
+                          skuId: good.id,
+                        },
+                      }"
                     >
-                      <img :src="good.defaultImg"/>
+                      <img :src="good.defaultImg" />
                     </router-link>
                   </div>
                   <div class="price">
@@ -103,12 +121,12 @@
                     <i class="command">已有<span>2000</span>人评价</i>
                   </div>
                   <div class="operate">
-                    <a
-                      href="success-cart.html"
-                      target="_blank"
+                    <button
                       class="sui-btn btn-bordered btn-danger"
-                      >加入购物车</a
+                      @click="addOrUpdateShopCat(good.id, 1)"
                     >
+                      加入购物车
+                    </button>
                     <a href="javascript:void(0);" class="sui-btn btn-bordered"
                       >收藏</a
                     >
@@ -118,9 +136,9 @@
             </ul>
           </div>
           <!-- 分页组件 -->
-          <Pagination 
-            :pageNo = "this.searchParams.pageNo"
-            :pageSize = "this.searchParams.pageSize"
+          <Pagination
+            :pageNo="this.searchParams.pageNo"
+            :pageSize="this.searchParams.pageSize"
             :total="total"
             :continues="5"
             @getPageNo="getPageNo"
@@ -133,7 +151,7 @@
 </template>
 
 <script>
-import Pagination  from '@/components/Pagination';
+import Pagination from "@/components/Pagination";
 import { mapGetters, mapState } from "vuex";
 import SearchSelector from "./SearchSelector/SearchSelector";
 export default {
@@ -168,7 +186,7 @@ export default {
   components: {
     SearchSelector,
     Pagination,
-},
+  },
   mounted() {
     this.getSearchData();
   },
@@ -185,25 +203,25 @@ export default {
   },
   computed: {
     // 从vuex获取gettes数据
-    ...mapGetters(["goodList", "attrsList", "trademarkList","total"]),
-    isOne(){
-      return this.searchParams.order.indexOf('1') != -1;
+    ...mapGetters(["goodList", "attrsList", "trademarkList", "total"]),
+    isOne() {
+      return this.searchParams.order.indexOf("1") != -1;
     },
-    isTwo(){
-      return this.searchParams.order.indexOf('2') != -1;
+    isTwo() {
+      return this.searchParams.order.indexOf("2") != -1;
     },
-    jianTou(){
-      if(this.searchParams.order.indexOf('desc') != -1){
-        return '&#xe62d;';
-      }else{
-        return '&#xe62c;';
+    jianTou() {
+      if (this.searchParams.order.indexOf("desc") != -1) {
+        return "&#xe62d;";
+      } else {
+        return "&#xe62c;";
       }
     },
-    isAsc(){
-      return this.searchParams.order.indexOf('asc') != -1;
+    isAsc() {
+      return this.searchParams.order.indexOf("asc") != -1;
     },
-    isDesc(){
-      return this.searchParams.order.indexOf('desc') != -1;
+    isDesc() {
+      return this.searchParams.order.indexOf("desc") != -1;
     },
     /* total(){
       return this.$store.state.search.searchList.total;
@@ -258,40 +276,51 @@ export default {
       // 整理参数格式
       let props = `${attrs.attrName}:${attrValue}`;
       // 数组去重
-      if(this.searchParams.props.indexOf(props) == -1){
+      if (this.searchParams.props.indexOf(props) == -1) {
         // 将数据加入数组
         this.searchParams.props.push(props);
       }
       this.getSearchData();
     },
     // 移除商品属性
-    removeAttrvalue(attrvalue){
-      this.searchParams.props =  this.searchParams.props.filter((element) => {
+    removeAttrvalue(attrvalue) {
+      this.searchParams.props = this.searchParams.props.filter((element) => {
         return element != attrvalue;
-      })
+      });
       this.getSearchData();
     },
     // 改变排序顺序
-    changeOrder(flag){
-      let arr = this.searchParams.order.split(':');
+    changeOrder(flag) {
+      let arr = this.searchParams.order.split(":");
       // 判断是否需要切换综合或者价格
-      if(flag != arr[0]){
+      if (flag != arr[0]) {
         arr[0] = flag;
       }
-      arr[1] = arr[1] === 'desc'? 'asc' : 'desc';
+      arr[1] = arr[1] === "desc" ? "asc" : "desc";
       // 将数组拼接成字符串
-      this.searchParams.order = arr.join(':');
+      this.searchParams.order = arr.join(":");
       // console.log(arr.join(':'));
       this.getSearchData();
     },
     // 获取分页组件的页码数
-    getPageNo(pageNo){
+    getPageNo(pageNo) {
       // console.log(pageNo);
       // 整理服务器参数
       this.searchParams.pageNo = pageNo;
       // 再次发请求
       this.getSearchData();
-    }
+    },
+    // 加入购物车
+    addOrUpdateShopCat(skuId, skuNum) {
+      console.log(skuId, skuNum);
+      this.$store
+        .dispatch("addOrUpdateShopCat", { skuid: skuId, skuNum })
+        .then((res) => {
+          // console.log(res);
+          // 跳转到购物车页面
+          this.$router.push("/shopCart");
+        });
+    },
   },
   watch: {
     // 监听路由的变化，再次发起请求。
@@ -556,7 +585,7 @@ export default {
 }
 
 @font-face {
-  font-family: 'iconfont';
-  src: url('@/assets/iconfont.ttf') format('truetype');
+  font-family: "iconfont";
+  src: url("@/assets/iconfont.ttf") format("truetype");
 }
 </style>

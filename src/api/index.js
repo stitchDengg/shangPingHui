@@ -87,3 +87,6 @@ export const reqAddressInfo = () => requests({url:'user/userAddress/auth/findUse
 // 获取订单交易页面信息
 ///api/order/auth/trade
 export const reqOrderInfo = () => requests({url:'order/auth/trade',method:'get'});
+
+// 提交订单
+// /api/order/auth/submitOrder?tradeNo={tradeNo}
