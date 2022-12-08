@@ -13,7 +13,5 @@ module.exports = defineConfig({
       }
     },
   },
-  publicPath: './shangPingHui',//github仓库名
-  assetsDir: 'shangPingHui',//同上，否则访问不到静态资源
-  outputDir:"dist",
+  publicPath: './',
 })
