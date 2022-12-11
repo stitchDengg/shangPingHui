@@ -40,7 +40,7 @@ const router = new VueRouter({
 
 // 全局守卫，前置守卫（在路由跳转之前进行判断）
 router.beforeEach((to, from, next) => {
-  let token = store.state.users.token;
+  let token = store.state.users.token || localStorage.getItem('token');
   let name = store.state.users.userInfo.name;
   if (token) {
     //用户已经登陆,还想去login休想
@@ -65,10 +65,17 @@ router.beforeEach((to, from, next) => {
     }
   } else {
     // 未登陆
-    next();
+    //不能去个人中心 交易相关等页面
+    //去的不是这些页面 则需要放行
+    let toPath = to.path;
+    if(toPath.indexOf('/trade') != -1 || toPath.indexOf('/pay') != -1 || toPath.indexOf('/center') != -1){
+      // 把未登陆想去而没有去成的信息存储于地址栏中
+      next('/login?redirect='+toPath);
+    }else{
+      console.log(12331231);
+      next();
+    }
   }
-})
-
-
+});
 
 export default router;

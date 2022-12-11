@@ -35,6 +35,7 @@ const actions = {
     if(res.code == 200){
       console.log(res.data);
       commit('GETUSERINFO',res.data);
+      localStorage.setItem('user',JSON.stringify(res.data));
       return 'ok';
     }else{
       return Promise.reject(new Error('获取用户信息失败'));

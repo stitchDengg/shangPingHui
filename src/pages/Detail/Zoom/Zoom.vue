@@ -1,9 +1,9 @@
 <template>
   <div class="spec-preview">
-    <img :src="imgObj.imgUrl" />
+    <img v-lazy="imgObj.imgUrl" />
     <div class="event" @mousemove="handler"></div>
     <div class="big">
-      <img :src = imgObj.imgUrl ref="big"/>
+      <img v-lazy = imgObj.imgUrl ref="big"/>
     </div>
     <!-- 遮罩层 -->
     <div class="mask" ref="mask"></div>

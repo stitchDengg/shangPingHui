@@ -25,7 +25,7 @@
                   {{ keyword }}
                 </li>
               </ul>
-              <img :src="floorList.imgUrl" />
+              <img v-lazy="floorList.imgUrl" />
             </div>
             <div class="floorBanner">
               <div class="swiper-container" id="floor1Swiper">
@@ -35,7 +35,7 @@
                     v-for="carousel in floorList.carouselList"
                     :key="carousel.id"
                   >
-                    <img :src="carousel.imgUrl" />
+                    <img v-lazy="carousel.imgUrl" />
                   </div>
                   <!-- <div class="swiper-slide">
                     <img src="./images/floor-1-b02.png" />

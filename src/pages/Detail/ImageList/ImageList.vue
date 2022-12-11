@@ -7,7 +7,7 @@
         :key="skuImage.id"
         @click="changeActive(index)"
       >
-        <img :src="skuImage.imgUrl" :class="{active:index == currentIndex}"/>
+        <img v-lazy="skuImage.imgUrl" :class="{active:index == currentIndex}"/>
       </div>
     </div>
     <div class="swiper-button-next"></div>

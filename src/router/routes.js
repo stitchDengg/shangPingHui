@@ -1,22 +1,15 @@
 // 路由配置信息
-import Home from '../pages/Home';
-import Search from '../pages/Search'
-import Login from '../pages/Login'
-import Register from '../pages/Register'
-import Detail from '../pages/Detail'
-import AddCartSuccess from '../pages/AddCartSuccess'
-import ShopCart from '@/pages/ShopCart'
-import Trade from '@/pages/Trade'
-import Pay from '@/pages/Pay'
+// 一级路由
+
 export default [
   {
     path:'/home',
-    component:Home,
+    component:() => import('../pages/Home'),
     meta:{show:true}
   },
   {
     path:'/search/:keyword?',
-    component:Search,
+    component:() => import('../pages/Search'),
     meta:{show:true},
     name:'search',
     // 1.布尔值写法:params
@@ -34,18 +27,18 @@ export default [
   {
     name:'login',
     path:'/login',
-    component:Login,
+    component:() => import('../pages/Login'),
     meta:{show:false}
   },
   {
     path:'/register',
-    component:Register,
+    component:() => import('../pages/Register'),
     meta:{show:false}
   },
   { 
     name:'detail',
     path:'/detail/:skuId',
-    component:Detail,
+    component:() => import('../pages/Detail'),
     meta:{show:true},
     props($route){
       return {
@@ -57,29 +50,79 @@ export default [
   {
     name:'AddCartSuccess',
     path:'/AddCartSuccess',
-    component:AddCartSuccess,
+    component:() => import('../pages/AddCartSuccess'),
     meta:{show:true}
   },
   // 购物车
   {
     name:'shopCart',
     path:'/shopCart',
-    component:ShopCart,
+    component:() => import('../pages/ShopCart'),
     meta:{show:true}
   },
   // 交易页面
   {
     name:'trade',
     path:'/trade',
-    component:Trade,
-    meta:{show:true}
+    component:() => import('../pages/Trade'),
+    meta:{show:true},
+    beforeEnter: (to, from, next) => {
+      // 如果是从购物车到交易页面，就放行
+      if(from.path == '/shopCart'){
+        next();
+      }else{
+        // 不然就停留在当前
+        next(false);
+      }
+    }
   },
   // 支付页面
   {
     name:'pay',
     path:'/pay',
-    component:Pay,
+    component:() => import('../pages/Pay'),
+    meta:{show:true},
+    beforeEnter: (to, from, next) => {
+      // 如果是从交易到交易支付页面，就放行
+      if(from.path == '/trade'){
+        next();
+      }else{
+        // 不然就停留在当前
+        next(false);
+      }
+    }
+  },
+  // 支付成功页面
+  {
+    name:'paySuccess',
+    path:'/paySuccess',
+    component:() => import('../pages/PaySuccess'),
     meta:{show:true}
+  },
+  // 个人中心
+  {
+    name:'center',
+    path:'/center',
+    component:() => import('../pages/Center'),
+    meta:{show:true},
+    //二级路由
+    children:[
+      {
+        name:'myOrder',
+        path:'myOrder',
+        component:() => import('../pages/Center/MyOrder'),
+      },
+      {
+        name:'groupOrder',
+        path:'groupOrder',
+        component:() => import('../pages/Center/GroupOrder'),
+      },
+      // 默认路由
+      {
+        path:'/center',
+        redirect:'/center/myOrder'
+      }
+    ]
   },
   // 重定向，在项目跑起来的时候，访问/的时候，立马让他定向到首页
   {

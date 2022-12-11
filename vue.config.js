@@ -14,4 +14,6 @@ module.exports = defineConfig({
     },
   },
   publicPath: './',
+  // 去除打包后的map文件,提高打包速度和减小体积
+  productionSourceMap: false,
 })

@@ -11,7 +11,7 @@
               v-for="carousel in bannerList"
               :key="carousel.id"
             >
-              <img :src="carousel.imgUrl" />
+              <img v-lazy="carousel.imgUrl" />
             </div>
           </div>
           <!-- 如果需要分页器 -->

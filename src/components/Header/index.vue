@@ -19,9 +19,9 @@
           </p>
         </div>
         <div class="typeList">
-          <a href="###">我的订单</a>
-          <a href="###">我的购物车</a>
-          <a href="###">我的尚品汇</a>
+          <router-link to="/center">我的订单</router-link>
+          <router-link to="/shopcart">我的购物车</router-link>
+          <router-link to="/center">我的尚品汇</router-link>
           <a href="###">尚品汇会员</a>
           <a href="###">企业采购</a>
           <a href="###">关注尚品汇</a>
@@ -123,12 +123,13 @@ export default {
     logout(){
       reqLogout().then(res => {
         console.log(res);
-      })
+      });
+      localStorage.clear();
     }
   },
   computed: {
     userInfo(){
-      return this.$store.state.users.userInfo;
+      return JSON.parse(localStorage.getItem('user')) || this.$store.state.users.userInfo;  
     },
   },
 };

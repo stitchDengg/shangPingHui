@@ -90,9 +90,12 @@ export default {
       try {
         let { phone, password } = this;
         this.$store.dispatch("userLogin", { phone, password }).then((res) => {
-          console.log(res,111);
           // 跳转到home首页
-          this.$router.push("/home");
+          if(this.$route.query.redirect){
+            this.$router.push(this.$route.query.redirect)
+          }else{
+            this.$router.push("/home");
+          }
         });
       } catch (error) {
         console.log(error);

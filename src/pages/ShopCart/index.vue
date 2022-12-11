@@ -21,7 +21,7 @@
             />
           </li>
           <li class="cart-list-con2">
-            <img :src="cart.imgUrl" />
+            <img v-lazy="cart.imgUrl" />
             <div class="item-msg">{{ cart.skuName }}</div>
           </li>
           <li class="cart-list-con4">

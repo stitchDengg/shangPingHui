@@ -17,6 +17,27 @@ Vue.config.productionTip = false;
 import store from '@/store'
 // 使用Vue-router
 Vue.use(VueRouter)
+
+// 统一接受接口api文件夹里面全部的请求函数
+import * as API from '@/api';
+// 将所有的请求函数挂载到Vue的原型对象上
+Vue.prototype.$api = API;
+
+// element-ui 按需引入
+import { MessageBox } from 'element-ui';
+Vue.prototype.$msgbox = MessageBox;
+Vue.prototype.$alert = MessageBox.alert;
+
+const loadimage = require('./assets/奥特曼.png')
+
+// 引入图片懒加载插件
+import VueLazyload from 'vue-lazyload'
+Vue.use(VueLazyload,{
+  // 懒加载默认图片
+  loading:loadimage,
+})
+
+
 new Vue({
   render: h => h(App),
   // 注册路由：写法是kv一致省略v
